@@ -20,6 +20,21 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="147dp"
+        android:layout_height="42dp"
+        android:backgroundTint="#8BC34A"
+        android:contentDescription="@string/appbar_scrolling_view_behavior"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintVertical_bias="0.876"
+        tools:ignore="MissingConstraints" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="300dp"
@@ -35,7 +50,7 @@
     <EditText
         android:id="@+id/Search"
         android:layout_width="174dp"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
         android:layout_marginTop="44dp"
         android:hint="@string/recherhce"
         app:layout_constraintEnd_toEndOf="parent"

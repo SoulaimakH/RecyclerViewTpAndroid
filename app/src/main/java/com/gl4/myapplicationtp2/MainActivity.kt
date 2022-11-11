@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gl4.myapplicationtp2.databinding.ActivityMainBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity()  {
@@ -24,34 +23,34 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     var matieres = listOf<String>("Cours","TP")
+    var etats = listOf<String>("All","Absent","Present")
     lateinit var mEdit : EditText;
     lateinit var button1 :Button
     var studients = ArrayList<Student>()
-
+    lateinit var CheckBoxA:CheckBox
+    lateinit var position:String
     fun CreerMesLigneCours() :ArrayList<Student>
     {
         val studients = ArrayList<Student>()
-        studients.add( Student("sanoussi","Mouhamed","h"))
-        studients.add( Student("Kahla","soulaima","f"))
-        studients.add( Student("Nom2","Prm","f"))
-        studients.add( Student("Nom3","kiven","h"))
-        studients.add( Student("Tebolbi","Karim","h"))
-        studients.add( Student("Moalla","Mariem","f"))
-        studients.add( Student("Nom5","Ismahan","f"))
-        studients.add( Student("Nom6","Karim","h"))
+        studients.add( Student("sanoussi","Mouhamed","h","A"))
+        studients.add( Student("Kahla","soulaima","f","P"))
+        studients.add( Student("Tebolbi","Karim","h","A"))
+        studients.add( Student("Moalla","Mariem","f","P"))
+        studients.add( Student("Nom5","Ismahan","f","A"))
+        studients.add( Student("Nom6","Karim","h","P"))
         return studients
     }
     fun CreerMesLigneTp() :ArrayList<Student>
     {
         val studients = ArrayList<Student>()
-        studients.add( Student("Sdiri","Adem","h"))
-        studients.add( Student("tekaya","aicha","f"))
-        studients.add( Student("Nom2","bayrim","f"))
-        studients.add( Student("Nom3","kiven","h"))
-        studients.add( Student("Tebolbi","Karim","h"))
-        studients.add( Student("Moalla","Mariem","f"))
-        studients.add( Student("Nom5","Ismahan","f"))
-        studients.add( Student("Nom6","Karim","h"))
+        studients.add( Student("Sdiri","Adem","h","A"))
+        studients.add( Student("tekaya","aicha","f","P"))
+        studients.add( Student("Nom2","bayrim","f","A"))
+
+        studients.add( Student("Tebolbi","Karim","h","P"))
+        studients.add( Student("Moalla","Mariem","f","P"))
+        studients.add( Student("Nom5","Ismahan","f","P"))
+
 
         return studients
     }
@@ -60,6 +59,7 @@ class MainActivity : AppCompatActivity()  {
     private lateinit var Adapter: studentAdapter
 
     val spinner : Spinner by lazy { findViewById(R.id.spinner) }
+    val spinner2 : Spinner by lazy { findViewById(R.id.spinner2) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,29 +73,51 @@ class MainActivity : AppCompatActivity()  {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         spinner.adapter = ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,matieres)
+        spinner2.adapter = ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,etats)
         studients=CreerMesLigneCours();
         monRecycler = findViewById(R.id.recyclerView)
         monRecycler.layoutManager = LinearLayoutManager(this)
         mEdit = findViewById<View>(R.id.Search) as EditText
 
-
+        Adapter=studentAdapter(studients)
+        var studientscours = CreerMesLigneCours();
+        var studientstp= CreerMesLigneCours();
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-               if(matieres[position] =="Cours"){
-                   studients=CreerMesLigneCours();
-                   monRecycler.adapter =studentAdapter(studients)
-               }
+                this@MainActivity.position =matieres[position]
+                if(matieres[position] =="Cours"){
+                    studients=studientscours;
 
+                }
                 else{
-                   studients=CreerMesLigneTp();
-                   monRecycler.adapter =studentAdapter(studients)
-               }
-
+                    studients=studientstp;
+                }
+                monRecycler.adapter =studentAdapter(studients)
             }
             override fun onNothingSelected(adapterView: AdapterView<*>?) {
             }
         }
 
+        spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                if(this@MainActivity.position=="Cours"){
+                    studients=studientscours
+                }else studients=studientstp;
+
+
+               if(etats[position]=="Absent")
+                    studients=getFilter2("A");
+
+                if(etats[position]=="Present")
+                   studients=getFilter2("P");
+                else
+                    studients=getFilter2("");
+                monRecycler.adapter =studentAdapter(studients)
+            }
+            override fun onNothingSelected(adapterView: AdapterView<*>?) {
+            }
+        }
 
     /*    button1=findViewById(R.id.button);
 
@@ -119,6 +141,8 @@ class MainActivity : AppCompatActivity()  {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
+
+
 
 
 
@@ -157,6 +181,29 @@ class MainActivity : AppCompatActivity()  {
             println(studients)
             for (student in studients) {
                 if (student.nom.lowercase(Locale.ROOT)
+                        .contains(toString.lowercase(Locale.ROOT))
+                ) {
+                    resultList.add(student)
+                }
+            }
+            dataFilterList = resultList
+            println(dataFilterList)
+        }
+
+        return dataFilterList;
+
+
+    }
+
+    fun getFilter2(toString: String): ArrayList<Student> {
+        var dataFilterList = studients
+        if (toString.isEmpty()) {
+            var dataFilterList = studients
+        } else {
+            val resultList = ArrayList<Student>()
+            println(studients)
+            for (student in studients) {
+                if (student.etat.lowercase(Locale.ROOT)
                         .contains(toString.lowercase(Locale.ROOT))
                 ) {
                     resultList.add(student)
