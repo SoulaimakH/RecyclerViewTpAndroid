@@ -10,11 +10,23 @@
         android:id="@+id/spinner"
         android:layout_width="321dp"
         android:layout_height="48dp"
+        android:layout_marginTop="80dp"
         android:backgroundTint="#8BC34A"
         android:contentDescription="@string/appbar_scrolling_view_behavior"
         android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="409dp"
+        android:layout_height="531dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="150dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

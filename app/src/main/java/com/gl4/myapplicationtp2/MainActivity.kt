@@ -11,6 +11,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gl4.myapplicationtp2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +20,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     var matieres = listOf<String>("Cours","TP")
+
+    var studients = ArrayList<Student>()
+
+    fun CreerMesLigne() :ArrayList<Student>
+    {
+        val studients = ArrayList<Student>()
+        studients.add( Student("VIGAN","Joel","h"))
+        studients.add( Student("p2","Smith","h"))
+        studients.add( Student("p3","Prm","f"))
+        studients.add( Student("p4","kiven","h"))
+        return studients
+    }
+    lateinit var monRecycler: RecyclerView
     val spinner : Spinner by lazy { findViewById(R.id.spinner) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +59,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
+        studients=CreerMesLigne();
+        monRecycler = findViewById(R.id.recyclerView)
+        monRecycler.layoutManager = LinearLayoutManager(this)
+        monRecycler.adapter = studentAdapter(studients.toTypedArray())
+        {
+            Toast.makeText(this,"Vous avez sélectionné",Toast.LENGTH_SHORT).show()
+        }
 
     }
 
