@@ -9,16 +9,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.view.View
+import android.widget.*
 import com.gl4.myapplicationtp2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    val myStringArray = arrayOf("a", "b", "c")
-    val ListView: ListView by lazy { findViewById(R.id.listView) as ListView }
+    var matieres = listOf<String>("Cours","TP")
+    val spinner : Spinner by lazy { findViewById(R.id.spinner) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,8 +31,18 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        val adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,myStringArray);
-        ListView.adapter=adapter;
+        spinner.adapter = ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,matieres)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Toast.makeText(
+                    applicationContext, matieres.get(position),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            override fun onNothingSelected(adapterView: AdapterView<*>?) {
+            }
+        }
 
 
     }
@@ -47,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
